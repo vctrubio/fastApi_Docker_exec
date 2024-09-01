@@ -75,12 +75,3 @@ async def execute_script(request: Request):
 
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8080)
-
-
-"""
-Todos
-[X] Execute the main function
-    [X] Test many cases of main functions
-[X] Handle script execution errors
-
-"""
