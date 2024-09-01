@@ -20,4 +20,6 @@ Build an API service that takes any python script as input and returns the resul
 - 10.30AM [start]
 - 12PM [FastAPI/Backend]
 - 12.30 [DockerBuild]
+- 13.00 [Gcloud]
+- 13.30 [Finished] -- bug did not remove __main__ uvicorn and took for.ev.er
 
