@@ -1,0 +1,1 @@
+{"10": 10, "def main():\n    x = 10\n    return x\n\nprint('This will not be captured')": "def main():\n    x = 10\n    return x\n\nprint('This will not be captured')"}

@@ -21,20 +21,6 @@ def log_to_file(content):
         log_file.write(content + "\n")
 
 
-def extract_context(script):
-    try:
-        main_start = script.index("def main()")
-
-        main_content = script[
-            main_start:
-        ]  ## Needs to check for the return and not include the rest
-
-        return {"main_function_content": main_content}
-
-    except Exception as e:
-        return {"error": f"Failed to extract main(): {str(e)}"}
-
-
 @app.post("/execute")
 async def execute_script(request: Request):
     data = await request.json()
@@ -46,17 +32,29 @@ async def execute_script(request: Request):
     if "def main()" not in script:
         return {"error": "No main() function found"}
 
-    i = extract_context(script)
+    ptr_dict = {}
+    try:
+        exec(script, {}, ptr_dict)  # exec(object[, globals[, locals]])
+        if "main" in ptr_dict and callable(ptr_dict["main"]):
+            result = ptr_dict["main"]()
+        else:
+            result = None
+        response = {"result": result, "script": script}
+        log_to_file(json.dumps(response))
+        return response["result"]
 
-    response = {
-        "result": "script executed successfully",
-        "context": i,
-        "script": script,
-    }
-    log_to_file(json.dumps(response))
-
-    return response
+    except Exception as e:
+        return {"error": str(e)}
 
 
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8080)
+
+
+"""
+Todos
+[] Execute the main function
+[] Handle script execution errors
+
+
+"""
