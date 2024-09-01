@@ -20,5 +20,3 @@ deploy:
    --allow-unauthenticated \
    --port 8080
 
-logs:
-	gcloud logging read "resource.type=cloud_run_revision AND resource.labels.service_name=fastapi-app" --limit 100
