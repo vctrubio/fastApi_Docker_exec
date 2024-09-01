@@ -32,11 +32,11 @@ async def execute_script(request: Request):
     if "def main()" not in script:
         return {"error": "No main() function found"}
 
-    ptr_dict = {}
+    exec_var = {}
     try:
-        exec(script, {}, ptr_dict)  # exec(object[, globals[, locals]])
-        if "main" in ptr_dict and callable(ptr_dict["main"]):
-            result = ptr_dict["main"]()
+        exec(script, {}, exec_var)  # exec(object[, globals[, locals]])
+        if "main" in exec_var and callable(exec_var["main"]):
+            result = exec_var["main"]()
         else:
             result = None
         response = {"result": result, "script": script}
@@ -44,8 +44,9 @@ async def execute_script(request: Request):
         return response["result"]
 
     except Exception as e:
-        return {"error": str(e)}
-
+        error_msg = {"error": str(e)}
+        log_to_file(json.dumps(error_msg))
+        return error_msg
 
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8080)
@@ -53,8 +54,8 @@ if __name__ == "__main__":
 
 """
 Todos
-[] Execute the main function
+[X] Execute the main function
+    [] Test many cases of main functions
 [] Handle script execution errors
-
 
 """

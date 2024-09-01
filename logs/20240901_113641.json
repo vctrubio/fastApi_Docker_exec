@@ -1,0 +1,1 @@
+{"result": 10, "script": "def main():\n    x = 10\n    return x\n\nprint('This will HAHA be captured')"}
