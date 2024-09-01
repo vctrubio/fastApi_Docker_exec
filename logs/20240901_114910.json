@@ -1,0 +1,1 @@
+{"error": "unexpected indent (<string>, line 2)", "script": "def main():x = 10\n    return x\n\nprint('This will HAHA be captured')\nprint('try and see me again')"}

@@ -1,0 +1,1 @@
+{"error": "Object of type function is not JSON serializable", "script": "def main():\n    x = 10\n    y = lambda z: z * x\n    return y"}

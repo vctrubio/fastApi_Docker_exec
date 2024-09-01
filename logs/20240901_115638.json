@@ -1,0 +1,1 @@
+{"error": "name 'you' is not defined", "script": "def main():\n    x = 10\n    y = lambda z: z * x\n    return you"}

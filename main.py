@@ -24,6 +24,33 @@ def log_to_file(content):
         log_file.write(content + "\n")
 
 
+def run_script_in_sandbox(script):
+    exec_var = {}
+    try:
+        old_stdout = sys.stdout
+        sys.stdout = io.StringIO()
+
+        exec(script, {}, exec_var)
+
+        if "main" in exec_var and callable(exec_var["main"]):
+            result = exec_var["main"]()
+        else:
+            raise ValueError("main() function is not defined or not callable")
+
+        sys.stdout = old_stdout
+
+        try:
+            json.dumps(result)
+        except (TypeError, ValueError):
+            raise ValueError("main() did not return a JSON-serializable object")
+
+        return {"result": result, "script": script}
+
+    except Exception as e:
+        sys.stdout = old_stdout
+        raise e
+
+
 @app.post("/execute")
 async def execute_script(request: Request):
     data = await request.json()
@@ -35,28 +62,16 @@ async def execute_script(request: Request):
     if "def main()" not in script:
         return {"error": "No main() function found"}
 
-    exec_var = {}
     try:
-        old_stdout = sys.stdout
-        sys.stdout = io.StringIO()
-        
-        exec(script, {}, exec_var)  # exec(object[, globals[, locals]])
-        if "main" in exec_var and callable(exec_var["main"]):
-            result = exec_var["main"]()
-        else:
-            result = None
-            
-        sys.stdout = old_stdout
-
-        response = {"result": result, "script": script}
-        log_to_file(json.dumps(response))
-        return response["result"]
+        result = run_script_in_sandbox(script)
+        log_to_file(json.dumps(result))
+        return result["result"]
 
     except Exception as e:
-        sys.stdout = old_stdout
-        error_msg = {"error": str(e)}
-        log_to_file(json.dumps(error_msg))
-        return error_msg
+        result = {"error": str(e), "script": script}
+        log_to_file(json.dumps(result))
+        return result["error"]
+
 
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8080)
@@ -65,7 +80,7 @@ if __name__ == "__main__":
 """
 Todos
 [X] Execute the main function
-    [] Test many cases of main functions
-[] Handle script execution errors
+    [X] Test many cases of main functions
+[X] Handle script execution errors
 
 """
