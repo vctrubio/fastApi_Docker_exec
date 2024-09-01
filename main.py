@@ -2,15 +2,17 @@ import os
 import pandas
 import numpy
 
-import fastapi
+from fastapi import FastAPI, Request, Response
 import uvicorn
 
 
+app = FastAPI()
 
+@app.post("/execute")
+async def execute_script():
+    return {"message": "Script will executed"}
 
-def main():
-    print("Enviroment set-up, ready to go")
 
 
 if __name__ == "__main__":
-    main()
+    uvicorn.run(app, host="0.0.0.0", port=8080)
