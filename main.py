@@ -6,8 +6,7 @@ import pandas
 import numpy
 import json
 from datetime import datetime
-from fastapi import FastAPI, Request, Response
-import uvicorn
+from fastapi import FastAPI, Request
 
 
 app = FastAPI()
@@ -73,5 +72,5 @@ async def execute_script(request: Request):
         return result["error"]
 
 
-if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=8080)
+# if __name__ == "__main__":
+#     uvicorn.run(app, host="0.0.0.0", port=8080)
