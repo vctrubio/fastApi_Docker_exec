@@ -19,3 +19,5 @@ Build an API service that takes any python script as input and returns the resul
 
 - 10.30AM [start]
 - 12PM [FastAPI/Backend]
+- 12.30 [DockerBuild]
+
