@@ -1,0 +1,7 @@
+{
+    "result": "script executed successfully",
+    "context": {
+        "main_function_content": "def main():\n    x = 10\n    return x\n\nprint('This will not be captured')"
+    },
+    "script": "def main():\n    x = 10\n    return x\n\nprint('This will not be captured')"
+}
